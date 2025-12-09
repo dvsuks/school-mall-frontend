@@ -58,10 +58,10 @@ const data = reactive({
   user: JSON.parse(localStorage.getItem('system-user') || '{}')
 })
 
-if (!data.user?.id) {
-  ElMessage.error('请登录！')
-  router.push('/login')
-}
+// if (!data.user?.id) {
+//   ElMessage.error('请登录！')
+//   router.push('/login')
+// }
 
 const updateUser = () => {
   data.user = JSON.parse(localStorage.getItem('system-user') || '{}')
