@@ -45,6 +45,7 @@ th {
   text-overflow: ellipsis;
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2; /* 超出几行省略 */
+  -webkit-line-clamp: 2;
+  line-clamp:2; /* 超出几行省略 */
   overflow: hidden;
 }
