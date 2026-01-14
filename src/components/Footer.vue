@@ -10,7 +10,8 @@
             <div style="flex:1;text-align:right">邮箱:ncv932859@qq.com</div>
             </div>
             <div style="margin-bottom:10px">@DLFUOP WCIH,powered by qingege THX.</div>
-            <div style="padding-bottom: 20px; text-align: justify">备案:浙9404325-258-57-847843号-1<span style="margin-left: 20px">浙公网</div>
+            <div style="padding-bottom: 20px; text-align: justify">备案:浙9404325-258-57-847843号-1<span style="margin-left: 20px">浙公网</span></div>
+                
         </div>
     </div>
     </template>
