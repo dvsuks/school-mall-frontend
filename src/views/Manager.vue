@@ -19,21 +19,59 @@
             router
             style="border: none"
             :default-active="router.currentRoute.value.path"
-            :default-openeds="['user']"
+            :default-openeds="['user','info']"
         >
           <el-menu-item index="/manager/home">
             <el-icon><HomeFilled /></el-icon>
             <span>系统首页</span>
           </el-menu-item>
+          <el-sub-menu index="info">
+            <template #title>
+              <el-icon><Memo /></el-icon>
+              <span>信息管理</span>
+            </template>
+            <el-menu-item index="/manager/category">
+              <el-icon><Document /></el-icon>
+              <span>商品分类</span>
+            </el-menu-item>
+          </el-sub-menu>
+          <el-menu-item index="/manager/goods">
+              <el-icon><Document /></el-icon>
+              <span>商品信息</span>
+            </el-menu-item>
+            <el-menu-item index="/manager/carousel">
+              <el-icon><Document /></el-icon>
+              <span>轮播图信息</span>
+            </el-menu-item>
+             <el-menu-item index="/manager/collect">
+              <el-icon><Document /></el-icon>
+              <span>用户收藏</span>
+            </el-menu-item>
+             <el-menu-item index="/manager/recharge">
+              <el-icon><Document /></el-icon>
+              <span>用户充值</span>
+            </el-menu-item>
           <el-sub-menu index="user">
             <template #title>
               <el-icon><User /></el-icon>
               <span>用户管理</span>
             </template>
+            <el-menu-item index="/manager/user">
+              <el-icon><User /></el-icon>
+              <span>普通用户</span>
+            </el-menu-item>
             <el-menu-item index="/manager/admin">
               <el-icon><User /></el-icon>
               <span>管理员信息</span>
             </el-menu-item>
+            <el-menu-item index="/manager/person">
+              <el-icon><User /></el-icon>
+              <span>个人信息</span>
+            </el-menu-item>  
+            <el-menu-item index="/manager/password">
+              <el-icon><Lock /></el-icon>
+              <span>修改密码 </span>
+            </el-menu-item>  
           </el-sub-menu>
           <el-menu-item @click="logout">
             <el-icon><SwitchButton /></el-icon>
@@ -53,6 +91,7 @@
 import { reactive } from "vue";
 import router from "@/router";
 import {ElMessage} from "element-plus";
+import { Lock } from "@element-plus/icons-vue";
 
 const data = reactive({
   user: JSON.parse(localStorage.getItem('system-user') || '{}')
@@ -70,7 +109,7 @@ const updateUser = () => {
 const logout = () => {
   router.push('/login')
   ElMessage.success('退出成功')
-  localStorage.removeItem('code2026-user')
+  localStorage.removeItem('system-user')
 }
 </script>
 
