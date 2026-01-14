@@ -23,7 +23,7 @@
         <div style="margin-bottom: 20px; padding: 10px; border-radius: 5px; background-color: #e8e4e4; line-height: 25px; text-align: justify">{{ data.goods.description }}</div>
         <div>
           <el-input-number style="width: 150px; height: 40px" :min="1" v-model="data.num"></el-input-number>
-          <el-button style="height: 40px; margin-left: 5px" type="danger">加入购物车</el-button>
+          <el-button @click="addCart" style="height: 40px; margin-left: 5px" type="danger">加入购物车</el-button>
           <el-button style="height: 40px; margin-left: 5px" type="danger">立即购买</el-button>
         </div>
         <div style="margin-top: 10px; color: #666">校园小卖部销售并发货的商品，由小卖部提供发票和相应的售后服务。请您放心购买！</div>
@@ -61,6 +61,19 @@ const data = reactive({
    commentList: [],
   userCollect: {}
 })
+const addCart=()=>{
+  request.post('/cart/add',data,{
+    goodsId:data.id,
+    userId:data.user.id,
+    num:data.num
+  }).then(res=>{
+    if(res.code==='200'){
+      ElMessage.success('已加入购物车')
+    }else{
+      ElMessage.error(res.msg)
+    }
+  })
+}
 
 // 当前的商品是否被当前登录的用户收藏过
 const loadCollect = () => {
