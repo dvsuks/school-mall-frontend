@@ -44,11 +44,12 @@ const router = createRouter({
         
       ]
     },
-    { path: '/login', component: () => import('@/views/Login.vue') }
+    { path: '/login', component: () => import('@/views/Login.vue') },
+    {path:'/register',component:()=>import('@/views/Register.vue')}
   ]
 })
-router.beforeEach(guard,()=>{
-  window.scroll(option,{top:0,behavior:"smooth"})
+router.beforeEach(()=>{
+  window.scroll({top:0,behavior:"smooth"})
 })
 
 export default router
