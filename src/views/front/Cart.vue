@@ -29,22 +29,28 @@
       </div>
       <div style="text-align: right; margin-top: 20px; font-size: 20px">总价格：
         <b style="color: red; display: inline-block; min-width: 60px; text-align: left">{{ data.total }} 元</b>
-        <div style="margin-top: 10px"><el-button @click="addOrder" type="danger">立即下单</el-button></div>
+        <div style="margin-top: 10px"><el-button :disabled="data.total === 0" @click="handleAddOrder" type="danger">立即下单</el-button></div>
       </div>
     </div>
 
 
 
     <el-dialog title="下单信息" width="30%" v-model="data.formVisible" :close-on-click-modal="false" destroy-on-close>
-      <el-form ref="formRef" :model="data.form" :rules="data.rules" label-width="80px" style="padding-right: 30px; padding-top: 20px">
-        <el-form-item label="名称" prop="name">
-          <el-input v-model="data.form.name" autocomplete="off" />
+      <el-form ref="formRef" :model="data.form" :rules="data.rules" label-width="100px" style="padding-right: 30px">
+        <el-form-item label="配送类型" prop="deliverType">
+          <el-radio-group v-model="data.form.deliverType">
+            <el-radio-button value="自提" label="自提"></el-radio-button>
+            <el-radio-button value="外送" label="外送"></el-radio-button>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="收货地址" prop="address" v-if="data.form.deliverType === '外送'">
+          <el-input v-model="data.form.address" type="textarea" :rows="3" placeholder="请输入外送的接收地址，包括联系人、联系电话、地址信息"></el-input>
         </el-form-item>
       </el-form>
       <template #footer>
       <span class="dialog-footer">
         <el-button @click="data.formVisible = false">取 消</el-button>
-        <el-button type="primary" @click="save">保 存</el-button>
+        <el-button type="primary" @click="addOrder">确 认</el-button>
       </span>
       </template>
     </el-dialog>
@@ -66,31 +72,44 @@ const data = reactive({
   tableData: [],
   selectedRows: [],
   rules: {
-    name: [
-      { required: true, message: '请输入名称', trigger: 'blur' },
+    deliverType: [
+      { required: true, message: '请选择配送类型', trigger: 'change' }
+    ],
+    address: [
+      { required: true, message: '请输入配送地址', trigger: 'blur' }
     ]
   }
 })
 
-const addOrder =() =>{
-  if(!data.selectedRows.length){
+const handleAddOrder = () => {
+  data.form = {}
+  data.formVisible = true
+}
+
+const addOrder = () => {
+  if (!data.selectedRows?.length) {
     ElMessage.warning('请选择商品')
-    return 
+    return
   }
-  request.post('/orders/aadd', data,{userId :data.user.id,cartlist:data.selectedRows}).then(res=>{
-    if (res.code==='200'){
+  data.form.userId = data.user.id
+  data.form.cartList = data.selectedRows
+  request.post('/orders/add', data.form).then(res => {
+    if (res.code === '200') {
       ElMessage.success('下单成功')
-    }else{
+      data.formVisible = false
+      load()
+    } else {
       ElMessage.error(res.msg)
     }
   })
 }
 
-const changeNum =(row) =>{
+const changeNum = (row) => {
   calTotal()
   data.form = row
   update()
 }
+
 const calTotal = () => {
   data.total = 0
   // rows是选中行
