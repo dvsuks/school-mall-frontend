@@ -20,6 +20,8 @@ const router = createRouter({
            {path:'recharge',component:()=>import('@/views/manager/Recharge.vue')},
             {path:'orders',component:()=>import('@/views/manager/Orders.vue')},
             {path:'person',component:()=>import('@/views/manager/Person.vue')},
+             {path:'comment',component:()=>import('@/views/manager/Comment.vue')},
+            
       ]
     },
      {
@@ -36,6 +38,7 @@ const router = createRouter({
             {path:'userRecharge',component:()=>import('@/views/front/UserRecharge.vue')},
              {path:'cart',component:()=>import('@/views/front/Cart.vue')},
             {path:'userOrders',component:()=>import('@/views/front/UserOrders.vue')},
+            {path:'userComments',component:()=>import('@/views/front/UserComments.vue')},
         
         
       ]
