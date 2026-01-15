@@ -19,6 +19,7 @@ const router = createRouter({
           {path:'collect',component:()=>import('@/views/manager/Collect.vue')},
            {path:'recharge',component:()=>import('@/views/manager/Recharge.vue')},
             {path:'orders',component:()=>import('@/views/manager/Orders.vue')},
+            {path:'person',component:()=>import('@/views/manager/Person.vue')},
       ]
     },
      {
