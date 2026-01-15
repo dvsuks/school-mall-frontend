@@ -18,6 +18,7 @@ const router = createRouter({
           {path:'carousel',component:()=>import('@/views/manager/Carousel.vue')},
           {path:'collect',component:()=>import('@/views/manager/Collect.vue')},
            {path:'recharge',component:()=>import('@/views/manager/Recharge.vue')},
+            {path:'orders',component:()=>import('@/views/manager/Orders.vue')},
       ]
     },
      {
