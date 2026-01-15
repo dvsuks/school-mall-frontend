@@ -7,17 +7,23 @@
      </div>
      <div class="card" style="margin-bottom:5px">
         <div style="margin-bottom:10px">
-            <el-button @click="reset" type="primary" >新增</el-button>
+            <el-button @click="handleAdd" type="primary" >新增</el-button>
         </div>
         <div>
              <el-table :data="data.tableData" stripe style="width:100%">
             <el-table-column prop="username" label="账号"  />
              <el-table-column prop="name" label="姓名"  />
+             <el-table-column prop="avatar" label="头像">
+                <template #defalut="scope">
+                    <el-image  v-if="scope.row.avatar"style="width:50px;height:50px;display:block;border-radius: 50%;"
+                    :src="scope.row.avatar" :preview-src-list="[scope.row.avatar]"preview-teleported></el-image>
+                </template>
+                </el-table-column>
              <el-table-column prop="role" label="角色" />
              <el-table-column prop="account" label="账户余额" />
              <el-table-column label="操作" width="180" fixed="right">
                <template #default="scope">
-                   <el-button type="primary">编辑</el-button>
+                   <el-button type="primary"@click="handleEdit(scope.row)">编辑</el-button>
                <el-button type="danger" @click="del(scope.row.id)">删除</el-button>
                </template>
              </el-table-column>
@@ -31,13 +37,12 @@
      <el-dialog title="用户信息" v-model="data.formVisible" width="30%" destroy-on-close>
       <el-form ref="formRef" v-model="data.form" :rules="data.rules" label-width="80px" style="padding-right:30px;">
          <el-form-item prop="username" label="账号">
-            <el-input v-model="data.form.username" placeholder="请输入账号" autocomplete="off"></el-input>
+            <el-input :disabled="data.form.id !== undefined" v-model="data.form.username" placeholder="请输入账号" autocomplete="off"></el-input>
          </el-form-item>
          <el-form-item prop="name" label="姓名">
             <el-input v-model="data.form.name" placeholder="请输入姓名" autocomplete="off"></el-input>
          </el-form-item>
           <el-form-item prop="avater" label="头像">
-            <el-input v-model="data.form.avater" placeholder="请输入头像" autocomplete="off"></el-input>
             <el-upload
             :action="baseUrl +'/files/upload'"
             list-type="picture"
@@ -62,6 +67,8 @@ import { Search } from "@element-plus/icons-vue";
 import request from "@/utils/request";
 import { ElMessage, ElMessageBox } from "element-plus";
 
+const baseUrl=import.meta.env.VITE_BASE_URL
+const formRef=ref()
 const data = reactive({
     name: null,
     tableData: [],
@@ -70,79 +77,86 @@ const data = reactive({
     pageSize: 5,
     form: {},
     formVisible: false,
-    rules: {},
-});
+    rules: {
+       name:[
+        {required:true,message:'请输入活动名称',trigger:'blur'},
+       ] 
+    }
+})
 
 const load = () => {
     request.get('/user/selectPage', {
         params: {
             pageNum: data.pageNum,
             pageSize: data.pageSize,
-            name: data.name,
+            name: data.name
         }
     }).then(res => {
         if (res.code === '200') {
-            data.tableData = res.data?.list;
-            data.total = res.data?.total;
+            data.tableData = res.data?.list
+            data.total = res.data?.total
         } else {
-            ElMessage.error(res.msg);
+            ElMessage.error(res.msg)
         }
-    });
-};
-load();
+    })
+}
+load()
 
-const reset = () => {
-    data.name = null;
-    load();
-};
+
 
 const del = (id) => {
     ElMessageBox.confirm('您确定删除吗?', '删除确认', { type: 'warning' }).then(() => {
-        request.delete(`/user/delete/${id}`).then(res => {
+        request.delete('/user/delete/' + id).then(res => {
             if (res.code === '200') {
-                ElMessage.success('操作成功');
-                load();
+                ElMessage.success('操作成功')
+                load()
             } else {
-                ElMessage.error(res.msg);
+                ElMessage.error(res.msg)
             }
-        });
-    }).catch(() => {});
-};
+        })
+    }).catch(() => {})
+}
 
-const handleEdit = (row) => {
-    data.form = JSON.parse(JSON.stringify(row));
-    data.formVisible = true;
-};
+const handleAdd =() =>{
+    data.form=JSON.parse(JSON.stringify(row))
+    data.formVisible=true
+}
+const handleEdit=(row)=>{
+    data.form=row
+    data.formVisible=true
+}
 
-const add = () => {
-    request.post('/user/add', data.form).then(res => {
-        if (res.code === '200') {
-            ElMessage.success('操作成功');
-            data.formVisible = false;
-            load();
-        } else {
-            ElMessage.error(res.msg);
+const add=()=>{
+     request.post('/user/add',data.form).then(res=>{
+        if(res.code==='200'){
+            ElMessage.success('操作成功')
+            data.formVisible=false
+            load()
+        }else{
+            ElMessage.error(res.msg)
         }
-    });
-};
+    }) 
+}
 
-const update = () => {
-    request.put('/user/update', data.form).then(res => {
-        if (res.code === '200') {
-            ElMessage.success('操作成功');
-            data.formVisible = false;
-            load();
-        } else {
-            ElMessage.error(res.msg);
+const update=()=>{
+     request.put('/user/update',data.form).then(res=>{
+        if(res.code==='200'){
+            ElMessage.success('操作成功')
+            data.formVisible=false
+            load()
+        }else{
+            ElMessage.error(res.msg)
         }
-    });
-};
-
+    }) 
+}
 const save = () => {
-    formRef.value.validate((valid) => {
-        if (valid) {
-            data.form.id ? update() : add();
+    formRef.value.validate((valid)=>{
+        if (valid){
+            data.form.id ? update() : add()
         }
-    });
-};
+    })
+}
+const handleFileUpload=(res)=>{
+    data.form.avatar=res.data
+}
 </script>

@@ -45,7 +45,9 @@
         const updatePassword=()=>{
             if (data.user.newpassword!==data.user.confirmpassword){ 
                 ElMessage.warning('两次输入的密码不一致，请确认!')
-                return
+                return;
+            }
+            
             request.put('/updatePassword',data.user).then(res=>{
                 if(res.code==='200'){
                     ElMessage.success('更新成功')
