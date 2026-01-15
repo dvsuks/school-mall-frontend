@@ -21,6 +21,7 @@ const router = createRouter({
             {path:'orders',component:()=>import('@/views/manager/Orders.vue')},
             {path:'person',component:()=>import('@/views/manager/Person.vue')},
              {path:'comment',component:()=>import('@/views/manager/Comment.vue')},
+              {path:'dataManager',component:()=>import('@/views/manager/DataManager.vue')},
             
       ]
     },
