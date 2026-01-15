@@ -14,11 +14,12 @@
             <el-table-column prop="username" label="账号"  />
              <el-table-column prop="name" label="姓名"  />
              <el-table-column prop="avatar" label="头像">
-                <template #defalut="scope">
-                    <el-image  v-if="scope.row.avatar"style="width:50px;height:50px;display:block;border-radius: 50%;"
+                <template #default="scope">
+                    <el-image v-if="scope.row.avatar" style="width:50px;height:50px;display:block;border-radius: 50%"
                     :src="scope.row.avatar" :preview-src-list="[scope.row.avatar]"preview-teleported></el-image>
                 </template>
-                </el-table-column>
+            </el-table-column>
+  
              <el-table-column prop="role" label="角色" />
              <el-table-column prop="account" label="账户余额" />
              <el-table-column label="操作" width="180" fixed="right">
@@ -42,7 +43,8 @@
          <el-form-item prop="name" label="姓名">
             <el-input v-model="data.form.name" placeholder="请输入姓名" autocomplete="off"></el-input>
          </el-form-item>
-          <el-form-item prop="avater" label="头像">
+         </el-form>
+          <el-form-item prop="avatar" label="头像">
             <el-upload
             :action="baseUrl +'/files/upload'"
             list-type="picture"
@@ -50,7 +52,7 @@
             <el-button type="primary">点击上传</el-button>
          </el-upload>
          </el-form-item>
-      </el-form>
+     
       <template #footer>
          <span class="dialog-footer">
             <el-button @click="data.formVisible=false">取消</el-button>
@@ -118,11 +120,11 @@ const del = (id) => {
 }
 
 const handleAdd =() =>{
-    data.form=JSON.parse(JSON.stringify(row))
+    data.form={}
     data.formVisible=true
 }
 const handleEdit=(row)=>{
-    data.form=row
+    data.form=JSON.parse(JSON.stringify(row))
     data.formVisible=true
 }
 
