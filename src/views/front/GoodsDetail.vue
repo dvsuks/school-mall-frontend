@@ -24,7 +24,7 @@
         <div>
           <el-input-number style="width: 150px; height: 40px" :min="1" v-model="data.num"></el-input-number>
           <el-button @click="addCart" style="height: 40px; margin-left: 5px" type="danger">加入购物车</el-button>
-          <el-button style="height: 40px; margin-left: 5px" type="danger">立即购买</el-button>
+          <el-button @click="addOrder"style="height: 40px; margin-left: 5px" type="danger">立即购买</el-button>
         </div>
         <div style="margin-top: 10px; color: #666">校园小卖部销售并发货的商品，由小卖部提供发票和相应的售后服务。请您放心购买！</div>
       </div>
@@ -61,6 +61,15 @@ const data = reactive({
    commentList: [],
   userCollect: {}
 })
+const addOrder =() =>{
+  request.post('/orders/aadd', data,{userId :data.user.id,cartlist:[{goodsId:data.id,num:data.num}]}).then(res=>{
+    if (res.code==='200'){
+      ElMessage.success('下单成功')
+    }else{
+      ElMessage.error(res.msg)
+    }
+  })
+}
 const addCart=()=>{
   request.post('/cart/add',data,{
     goodsId:data.id,
